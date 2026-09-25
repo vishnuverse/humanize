@@ -136,7 +136,10 @@ def ordinal(value: NumberOrString, gender: str = "male") -> str:
     except (TypeError, ValueError):
         return str(value)
     gender = "male" if gender == "male" else "female"
-    digit = value % 10
+    if value % 100 in (11, 12, 13):
+        digit = 0
+    else:
+        digit = value % 10
     return f"{value}{P_(*_ORDINAL_SUFFIXES[gender][digit])}"
 
 
@@ -339,7 +342,7 @@ def fractional(value: NumberOrString) -> str:
     This function returns a human-readable fractional number in form of fractions and
     mixed fractions.
 
-    Pass in a string, or a number or a float, and this function returns:
+    Pass in a string, or a number, or a float, and this function returns:
 
     * a string representation of a fraction
     * or a whole number
