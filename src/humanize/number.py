@@ -186,7 +186,7 @@ def intcomma(value: NumberOrString, ndigits: int | None = None) -> str:
             if "." in value:
                 value = float(value)
             else:
-                value = int(value)
+                value = int(value.lstrip("+-"))
         elif not isinstance(value, int):
             if not math.isfinite(float(value)):
                 return _format_not_finite(float(value))
