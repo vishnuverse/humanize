@@ -186,7 +186,7 @@ def intcomma(value: NumberOrString, ndigits: int | None = None) -> str:
             if "." in value:
                 value = float(value)
             else:
-                value = int(value.lstrip("+-"))
+                value = int(value)
         elif not isinstance(value, int):
             if not math.isfinite(float(value)):
                 return _format_not_finite(float(value))
@@ -208,7 +208,6 @@ human_powers = (
     NS_("thousand", "thousand"),
     NS_("million", "million"),
     NS_("billion", "billion"),
-    NS_("trillion", "trillion"),
     NS_("quadrillion", "quadrillion"),
     NS_("quintillion", "quintillion"),
     NS_("sextillion", "sextillion"),
@@ -427,7 +426,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
 
     Args:
         value (int, float, str): Input number.
-        precision (int): Number of decimal for first part of the number.
+        precision (int): The number of digits the output should contain.
 
     Returns:
         str: Number in scientific notation z.wq x 10ⁿ.
