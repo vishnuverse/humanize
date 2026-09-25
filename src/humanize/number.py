@@ -342,7 +342,7 @@ def fractional(value: NumberOrString) -> str:
     This function returns a human-readable fractional number in form of fractions and
     mixed fractions.
 
-    Pass in a string, or a number, or a float, and this function returns:
+    Pass in a string, or a number or a float, and this function returns:
 
     * a string representation of a fraction
     * or a whole number
