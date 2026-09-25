@@ -341,7 +341,7 @@ def naturalday(value: dt.date | dt.datetime, format: str = "%b %d") -> str:
         if isinstance(value, dt.datetime) and value.tzinfo is not None:
             today = dt.datetime.now(value.tzinfo).date()
         else:
-            today = dt.datetime.now(dt.timezone.utc).date()
+            today = dt.date.today()
         value = dt.date(value.year, value.month, value.day)
     except AttributeError:
         # Passed value wasn't date-ish
