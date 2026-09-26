@@ -136,7 +136,7 @@ def ordinal(value: NumberOrString, gender: str = "male") -> str:
     except (TypeError, ValueError):
         return str(value)
     gender = "male" if gender == "male" else "female"
-    digit = value % 10
+    digit = 0 if value % 100 in (11, 12, 13) else value % 10
     return f"{value}{P_(*_ORDINAL_SUFFIXES[gender][digit])}"
 
 
@@ -430,7 +430,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
         precision (int): Number of decimal for first part of the number.
 
     Returns:
-        str: Number in scientific notation z.wq x 10ⁿ.
+        str: Number in string notation z.wq x 10ⁿ.
     """
     import math
 
