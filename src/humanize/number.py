@@ -136,7 +136,11 @@ def ordinal(value: NumberOrString, gender: str = "male") -> str:
     except (TypeError, ValueError):
         return str(value)
     gender = "male" if gender == "male" else "female"
-    digit = value % 10
+    # Numbers ending in 11, 12, 13 get "th" (teens exception)
+    if value % 100 in (11, 12, 13):
+        digit = 0
+    else:
+        digit = value % 10
     return f"{value}{P_(*_ORDINAL_SUFFIXES[gender][digit])}"
 
 
@@ -280,12 +284,12 @@ def intword(value: NumberOrString, format: str = "%.1f") -> str:
     ordinal -= 1
     power = powers[ordinal]
     chopped = value / power
-    rounded_value = float(format % chopped)
+    rounded_value = format % chopped
 
     singular, plural = human_powers[ordinal]
-    unit = _ngettext(singular, plural, math.ceil(rounded_value))
+    unit = _ngettext(singular, plural, math.ceil(float(rounded_value)))
     decimal_sep = decimal_separator()
-    number = (format % rounded_value).replace(".", decimal_sep)
+    number = (format % chopped).replace(".", decimal_sep)
     return f"{negative_prefix}{number} {unit}"
 
 
