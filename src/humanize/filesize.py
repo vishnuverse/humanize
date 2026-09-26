@@ -41,7 +41,7 @@ def naturalsize(
     gnu: bool = False,
     format: str = "%.1f",
 ) -> str:
-    """Format a number of bytes like a human-readble filesize (e.g. 10 kB).
+    """Format a number of bytes like a human-readable filesize (e.g. 10 kB).
 
     By default, decimal suffixes (kB, MB) are used.
 
@@ -99,10 +99,8 @@ def naturalsize(
     from math import log
 
     exp = int(min(log(abs_bytes, base), len(suffix)))
-    # The suffix is chosen from the unrounded byte count, but `format` rounds the
-    # mantissa afterward; rounding can push it up to `base` (e.g. 999999 is
-    # 999.999 kB, which formats to "1000.0 kB"). When that happens and a larger
-    # suffix is available, step up one suffix so the result reads "1.0 MB".
+    # The suffix is chosen from the unrounded byte count, but
+    # rounding can push the mantissa up to `base`.
     if exp < len(suffix) and abs(float(format % (abs_bytes / (base**exp)))) >= base:
         exp += 1
     space = "" if gnu else " "
