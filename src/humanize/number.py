@@ -430,7 +430,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
         precision (int): Number of decimal for first part of the number.
 
     Returns:
-        str: Number in string notation z.wq x 10ⁿ.
+        str: Number in scientific notation z.wq x 10ⁿ.
     """
     import math
 
