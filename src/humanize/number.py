@@ -137,6 +137,8 @@ def ordinal(value: NumberOrString, gender: str = "male") -> str:
         return str(value)
     gender = "male" if gender == "male" else "female"
     digit = value % 10
+    if value % 100 in (11, 12, 13):
+        digit = 0
     return f"{value}{P_(*_ORDINAL_SUFFIXES[gender][digit])}"
 
 
@@ -394,8 +396,7 @@ def fractional(value: NumberOrString) -> str:
         return f"{numerator:.0f}/{denominator:.0f}"
 
     # int() truncates toward zero, so for a negative number both
-    # whole_number and numerator carry the minus sign, which prints as
-    # "-1 -3/10". The sign already rides on the whole part; absorb it
+    # whole_number and numerator are negative; subtract the numerator
     # from the fractional part so the result reads as a normal mixed
     # fraction.
     return f"{whole_number:.0f} {abs(numerator):.0f}/{denominator:.0f}"
