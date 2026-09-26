@@ -23,17 +23,17 @@ if TYPE_CHECKING:
 
 
 _SUPERSCRIPT_MAP = {
-    "0": "\u2070",
-    "1": "\u00b9",
-    "2": "\u00b2",
-    "3": "\u00b3",
-    "4": "\u2074",
-    "5": "\u2075",
-    "6": "\u2076",
-    "7": "\u2077",
-    "8": "\u2078",
-    "9": "\u2079",
-    "-": "\u207b",
+    "0": "â°",
+    "1": "Â¹",
+    "2": "Â²",
+    "3": "Â³",
+    "4": "â´",
+    "5": "âµ",
+    "6": "â¶",
+    "7": "â·",
+    "8": "â¸",
+    "9": "â¹",
+    "-": "â»",
 }
 _SUPERSCRIPT_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
 
@@ -402,22 +402,22 @@ def fractional(value: NumberOrString) -> str:
 
 
 def scientific(value: NumberOrString, precision: int = 2) -> str:
-    """Return number in string scientific notation z.wq x 10\u207f.
+    """Return number in string scientific notation z.wq x 10â¿.
 
     Examples:
         ```pycon
         >>> scientific(float(0.3))
-        '3.00 x 10\u207b\u00b9'
+        '3.00 x 10â»Â¹'
         >>> scientific(int(500))
-        '5.00 x 10\u00b2'
+        '5.00 x 10Â²'
         >>> scientific(-1000)
-        '-1.00 x 10\u00b3'
+        '-1.00 x 10Â³'
         >>> scientific(1000, 1)
-        '1.0 x 10\u00b3'
+        '1.0 x 10Â³'
         >>> scientific(1000, 3)
-        '1.000 x 10\u00b3'
+        '1.000 x 10Â³'
         >>> scientific("99")
-        '9.90 x 10\u00b9'
+        '9.90 x 10Â¹'
         >>> scientific("foo")
         'foo'
         >>> scientific(None)
@@ -430,7 +430,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
         precision (int): Number of decimal for first part of the number.
 
     Returns:
-        str: Number in scientific notation z.wq x 10\u207f.
+        str: Number in scientific notation z.wq x 10â¿.
     """
     import math
 
@@ -444,7 +444,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
     n = fmt.format(value)
     part1, part2 = n.split("e")
     # Normalise exponent: int() strips the "+" sign and leading zeros,
-    # while preserving "-" and a single "0" for 10\u2070.
+    # while preserving "-" and a single "0" for 10â°.
     return part1 + " x 10" + str(int(part2)).translate(_SUPERSCRIPT_TRANS)
 
 
@@ -535,7 +535,7 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
         >>> metric(2e8, "W")
         '200 MW'
         >>> metric(220e-6, "F")
-        '220 \u03bcF'
+        '220 Î¼F'
         >>> metric(1e-14, precision=4)
         '10.00 f'
 
@@ -548,7 +548,7 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
     `scientific()`.
     ```pycon
     >>> metric(1e40)
-    '1.00 x 10\u2074\u2070'
+    '1.00 x 10â´â°'
 
     ```
 
@@ -582,11 +582,11 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
     if exponent >= 3:
         ordinal_ = "kMGTPEZYRQ"[exponent // 3 - 1]
     elif exponent < 0:
-        ordinal_ = "m\u03bcnpfazyrq"[(-exponent - 1) // 3]
+        ordinal_ = "mÎ¼npfazyrq"[(-exponent - 1) // 3]
     else:
         ordinal_ = ""
     value_ = format(value, f".{digits}f")
-    if not (unit or ordinal_) or unit in ("\u00b0", "\u2032", "\u2033"):
+    if not (unit or ordinal_) or unit in ("Â°", "â²", "â³"):
         space = ""
     else:
         space = " "
