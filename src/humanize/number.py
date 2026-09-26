@@ -23,17 +23,17 @@ if TYPE_CHECKING:
 
 
 _SUPERSCRIPT_MAP = {
-    "0": "⁰",
-    "1": "¹",
-    "2": "²",
-    "3": "³",
-    "4": "⁴",
-    "5": "⁵",
-    "6": "⁶",
-    "7": "⁷",
-    "8": "⁸",
-    "9": "⁹",
-    "-": "⁻",
+    "0": "\u2070",
+    "1": "\u00b9",
+    "2": "\u00b2",
+    "3": "\u00b3",
+    "4": "\u2074",
+    "5": "\u2075",
+    "6": "\u2076",
+    "7": "\u2077",
+    "8": "\u2078",
+    "9": "\u2079",
+    "-": "\u207b",
 }
 _SUPERSCRIPT_TRANS = str.maketrans(_SUPERSCRIPT_MAP)
 
@@ -136,7 +136,10 @@ def ordinal(value: NumberOrString, gender: str = "male") -> str:
     except (TypeError, ValueError):
         return str(value)
     gender = "male" if gender == "male" else "female"
-    digit = value % 10
+    if value % 100 in (11, 12, 13):
+        digit = 0
+    else:
+        digit = value % 10
     return f"{value}{P_(*_ORDINAL_SUFFIXES[gender][digit])}"
 
 
@@ -168,7 +171,7 @@ def intcomma(value: NumberOrString, ndigits: int | None = None) -> str:
         ```
 
     Args:
-        value (int, float, str): Integer or float to convert.
+        value (int, float, str): Integer to convert.
         ndigits (int, None): Digits of precision for rounding after the decimal point.
 
     Returns:
@@ -402,22 +405,22 @@ def fractional(value: NumberOrString) -> str:
 
 
 def scientific(value: NumberOrString, precision: int = 2) -> str:
-    """Return number in string scientific notation z.wq x 10ⁿ.
+    """Return number in string scientific notation z.wq x 10\u207f.
 
     Examples:
         ```pycon
         >>> scientific(float(0.3))
-        '3.00 x 10⁻¹'
+        '3.00 x 10\u207b\u00b9'
         >>> scientific(int(500))
-        '5.00 x 10²'
+        '5.00 x 10\u00b2'
         >>> scientific(-1000)
-        '-1.00 x 10³'
+        '-1.00 x 10\u00b3'
         >>> scientific(1000, 1)
-        '1.0 x 10³'
+        '1.0 x 10\u00b2'
         >>> scientific(1000, 3)
-        '1.000 x 10³'
+        '1.000 x 10\u00b3'
         >>> scientific("99")
-        '9.90 x 10¹'
+        '9.90 x 10\u00b9'
         >>> scientific("foo")
         'foo'
         >>> scientific(None)
@@ -430,7 +433,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
         precision (int): Number of decimal for first part of the number.
 
     Returns:
-        str: Number in scientific notation z.wq x 10ⁿ.
+        str: Number in scientific notation z.wq x 10\u207f.
     """
     import math
 
@@ -444,7 +447,7 @@ def scientific(value: NumberOrString, precision: int = 2) -> str:
     n = fmt.format(value)
     part1, part2 = n.split("e")
     # Normalise exponent: int() strips the "+" sign and leading zeros,
-    # while preserving "-" and a single "0" for 10⁰.
+    # while preserving "-" and a single "0" for 10\u2070.
     return part1 + " x 10" + str(int(part2)).translate(_SUPERSCRIPT_TRANS)
 
 
@@ -535,7 +538,7 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
         >>> metric(2e8, "W")
         '200 MW'
         >>> metric(220e-6, "F")
-        '220 μF'
+        '220 \u03bcF'
         >>> metric(1e-14, precision=4)
         '10.00 f'
 
@@ -548,7 +551,7 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
     `scientific()`.
     ```pycon
     >>> metric(1e40)
-    '1.00 x 10⁴⁰'
+    '1.00 x 10\u2074\u2070'
 
     ```
 
@@ -582,11 +585,11 @@ def metric(value: float, unit: str = "", precision: int = 3) -> str:
     if exponent >= 3:
         ordinal_ = "kMGTPEZYRQ"[exponent // 3 - 1]
     elif exponent < 0:
-        ordinal_ = "mμnpfazyrq"[(-exponent - 1) // 3]
+        ordinal_ = "m\u03bcnpfazyrq"[(-exponent - 1) // 3]
     else:
         ordinal_ = ""
     value_ = format(value, f".{digits}f")
-    if not (unit or ordinal_) or unit in ("°", "′", "″"):
+    if not (unit or ordinal_) or unit in ("\u00b0", "\u2032", "\u2033"):
         space = ""
     else:
         space = " "
