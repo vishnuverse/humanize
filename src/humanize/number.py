@@ -146,7 +146,7 @@ def intcomma(value: NumberOrString, ndigits: int | None = None) -> str:
     """Converts an integer to a string containing commas every three digits.
 
     For example, 3000 becomes "3,000" and 45000 becomes "45,000". To maintain some
-    compatibility with Django's `intcomma`, this function also accepts floats.
+    consistency with Django's `intcomma`, this function also accepts floats.
 
     Examples:
         ```pycon
@@ -396,7 +396,8 @@ def fractional(value: NumberOrString) -> str:
         return f"{numerator:.0f}/{denominator:.0f}"
 
     # int() truncates toward zero, so for a negative number both
-    # whole_number and numerator are negative; subtract the numerator
+    # whole_number and numerator carry the minus sign, which prints as
+    # "-1 -3/10". The sign already rides on the whole part; absorb it
     # from the fractional part so the result reads as a normal mixed
     # fraction.
     return f"{whole_number:.0f} {abs(numerator):.0f}/{denominator:.0f}"
